@@ -4,9 +4,11 @@ let imagemInimigo;
 
 let cenario;
 let somDoJogo;
+let somPulo;
 let personagem;
 let inimigo;
 
+const matrizPersonagem = criaMatriz(230, 230, 3, 3);
 const matrizInimigo = [
   [0, 0],
   [104, 0],
@@ -43,16 +45,27 @@ function preload() {
   imagemPersonagem = loadImage('imagens/personagem/zombieV06.png');
   imagemInimigo = loadImage('imagens/inimigos/gotinha.png');
   somDoJogo = loadSound('sons/trilha_jogo.mp3');
+  somPulo = loadSound('sons/somPulo.mp3');
   
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  cenario = new Cenario(imagemCenario, 20);
-  personagem = new Personagem(imagemPersonagem, 230, 230, 3, 3);
+  cenario = new Cenario(imagemCenario, 10);
+  personagem = new Personagem(matrizPersonagem,imagemPersonagem, 0, 230, 230, 230, 230);
+
+  //matriz,imagem, posicaoImagemX, alturaImagem, larguraImagem, larguraSprite, alturaSprite
   inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 52, 52, 104, 104);
-  frameRate(8); // frames / segundo
+                      //matriz, imagem, posicaoImagemX, larguraImagem, alturaImagem, larguraSprite, alturaSprite
+  frameRate(40); // frames / segundo
   somDoJogo.loop();
+}
+
+function keyPressed(){
+  if(key === 'ArrowUp'){
+    personagem.pulaPersonagem();
+    somPulo.play();
+  }
 }
 
 function draw() {
@@ -61,5 +74,10 @@ function draw() {
   inimigo.exibe();
   inimigo.moveInimigo();
   personagem.exibe();
+  personagem.aplicaGravidade();
   
+  if(personagem.colisao(inimigo)){
+    console.log('colidiu');
+    noLoop();
+  }
 }

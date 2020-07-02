@@ -1,33 +1,45 @@
-class Personagem
+class Personagem extends Animacao
 {
-  constructor(imagem, alturaImagem, larguraImagem, colunasMatriz, linhasMatriz)
+  constructor(matriz,imagem, posicaoImagemX, alturaImagem, larguraImagem, larguraSprite, alturaSprite)
   {
-    this.imagem     = imagem;
-    this.alturaImagem     = alturaImagem;
-    this.larguraImagem    = larguraImagem;    
-    this.colunasMatriz = colunasMatriz;
-    this.linhasMatriz = linhasMatriz;
-    this.matriz     = criaMatriz(alturaImagem, larguraImagem, colunasMatriz, linhasMatriz);
-    this.frameAtual = 0;    
+    super(matriz, imagem, posicaoImagemX, alturaImagem, larguraImagem, larguraSprite, alturaSprite);
+   
+    this.frameAtual = 0; 
+    this.jump = -30; 
+    this.gravidade = 3;  
+    this.velocidadePulo = 0;
+    this.posicaoYInicial = height - this.alturaImagem;
+    this.posicaoY = this.posicaoYInicial;
   }
 
- 
-  exibe()
-  {
-    let metadeLargura = (this.largura / 2);
-    let metadeAltura  = this.altura / 2;
-    
-    image(this.imagem, 0, height - this.alturaImagem, this.larguraImagem, this.alturaImagem, this.matriz[this.frameAtual][0], this.matriz[this.frameAtual][1], this.larguraImagem, this.alturaImagem);
-    
-    this.anima();
+  pulaPersonagem(){
+    this.velocidadePulo = this.jump;
   }
-  
-  anima()
-  {
-    this.frameAtual++;
-    
-    if (this.frameAtual >= this.matriz.length - 1) {
-      this.frameAtual = 0;
+
+  aplicaGravidade(){
+    this.posicaoY += this.velocidadePulo;
+    this.velocidadePulo += this.gravidade;
+
+    if(this.posicaoY > this.posicaoYInicial){
+      this.posicaoY = this.posicaoYInicial;
     }
+  }
+
+  colisao(inimigo){
+    
+
+    const precisao = .8;
+
+    return collideRectRect(
+      this.posicaoImagemX, 
+      this.posicaoY, 
+      this.larguraImagem * precisao, 
+      this.alturaImagem * precisao,
+      inimigo.posicaoImagemX,
+      inimigo.posicaoY,
+      inimigo.larguraImagem * precisao,
+      inimigo.alturaImagem * precisao
+    );
+
   }
 }
