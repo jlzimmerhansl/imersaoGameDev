@@ -1,33 +1,23 @@
 class Personagem
 {
-  constructor(imagem, altura, largura)
+  constructor(imagem, alturaImagem, larguraImagem, colunasMatriz, linhasMatriz)
   {
     this.imagem     = imagem;
-    this.altura     = altura;
-    this.largura    = largura;    
-    this.matriz     = this.calculaFrames(imagem, this.altura, this.largura);
+    this.alturaImagem     = alturaImagem;
+    this.larguraImagem    = larguraImagem;    
+    this.colunasMatriz = colunasMatriz;
+    this.linhasMatriz = linhasMatriz;
+    this.matriz     = criaMatriz(alturaImagem, larguraImagem, colunasMatriz, linhasMatriz);
     this.frameAtual = 0;    
   }
-  
-  calculaFrames(imagem, altura, largura)
-  {
-    let matriz = [];
-    
-    for (let i = 0; i < imagem.height; i += altura) {
-      for (let j = 0; j < imagem.width; j += largura) {
-        matriz.push([j, i]);
-      }
-    }
-    
-    return matriz;
-  }
-  
+
+ 
   exibe()
   {
     let metadeLargura = (this.largura / 2);
     let metadeAltura  = this.altura / 2;
     
-    image(this.imagem, 0, height - this.altura, this.largura, this.altura, this.matriz[this.frameAtual][0], this.matriz[this.frameAtual][1], this.largura, this.altura);
+    image(this.imagem, 0, height - this.alturaImagem, this.larguraImagem, this.alturaImagem, this.matriz[this.frameAtual][0], this.matriz[this.frameAtual][1], this.larguraImagem, this.alturaImagem);
     
     this.anima();
   }
