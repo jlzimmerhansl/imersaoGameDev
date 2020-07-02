@@ -10,10 +10,12 @@ class Personagem extends Animacao
     this.velocidadePulo = 0;
     this.posicaoYInicial = height - this.alturaImagem;
     this.posicaoY = this.posicaoYInicial;
+    this.numeroPulos = 0;
   }
 
   pulaPersonagem(){
     this.velocidadePulo = this.jump;
+    this.numeroPulos++;
   }
 
   aplicaGravidade(){
@@ -22,6 +24,7 @@ class Personagem extends Animacao
 
     if(this.posicaoY > this.posicaoYInicial){
       this.posicaoY = this.posicaoYInicial;
+      this.numeroPulos = 0;
     }
   }
 
