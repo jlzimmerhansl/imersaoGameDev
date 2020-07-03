@@ -11,6 +11,8 @@ let imagemGrass;
 let imagemGrave;
 let imagemHands;
 let imagemMoon;
+let imagemTrol;
+let imagemInimigoVoador;
 
 let cenario;
 let somDoJogo;
@@ -27,10 +29,64 @@ let grass;
 let grave;
 let hands;
 let moon;
+let trol;
+let inimigoVoador;
+let pontuacao;
 
 const matrizPersonagem = criaMatriz(230, 230, 3, 3);
 const matrizInimigo = criaMatriz(180, 100, 3, 2);
 
+const matrizTrol = [
+  [0,0],
+  [400,0],
+  [800,0],
+  [1200,0],
+  [1600,0],
+  [0,400],
+  [400,400],
+  [800,400],
+  [1200, 400],
+  [1600, 400],
+  [0,800],
+  [400, 800],
+  [800, 800],
+  [1200, 800],
+  [1600, 800],
+  [0, 1200],
+  [400, 1200],
+  [800, 1200],
+  [1200, 1200],
+  [1600, 1200], 
+  [0, 1600],
+  [400, 1600],
+  [800, 1600],
+  [1200, 1600],
+  [1600, 1600],
+  [0, 2000],
+  [400, 2000],
+  [800, 2000],
+]
+
+const matrizInimigoVoador = [
+  [0,0],
+  [200, 0],
+  [400, 0],
+  [0, 150],
+  [200, 150],
+  [400, 150],
+  [0, 300],
+  [200, 300],
+  [400, 300],
+  [0, 450],
+  [200, 450],
+  [400, 450],
+  [0, 600],
+  [200, 600],
+  [400, 600],
+  [0, 750],
+]
+
+const inimigos = [];
 
 function preload() {
   //imagemCenario = loadImage('imagens/cenario/scenario.png');
@@ -47,6 +103,8 @@ function preload() {
 
   imagemPersonagem = loadImage('imagens/personagem/zombieV06.png');
   imagemInimigo = loadImage('imagens/inimigos/montros3.png');
+  imagemInimigoVoador = loadImage('imagens/inimigos/gotinha-voadora.png');
+  imagemTrol = loadImage('imagens/inimigos/troll.png');
   somDoJogo = loadSound('sons/trilha_jogo.mp3');
   somPulo = loadSound('sons/somPulo.mp3');
   
@@ -54,7 +112,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
+  pontuacao = new Pontuacao();
   background = new Cenario(imagemBackground, 10);
   sky = new Cenario(imagemSky, 9);
   cemitery = new Cenario(imagemCemitery, 6.75);
@@ -62,8 +120,14 @@ function setup() {
   grass = new Cenario(imagemGrass, 4.5);
 
   
-  personagem = new Personagem(matrizPersonagem,imagemPersonagem, 0, 230, 230, 230, 230);
-  inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 110, 70, 180, 100);
+  personagem = new Personagem(matrizPersonagem,imagemPersonagem, 0, 30, 230, 230, 230, 230);
+  const inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 30, 110, 70, 180, 100, 10, 500);
+  const trol = new Inimigo(matrizTrol, imagemTrol, width, 0, 200, 200, 400, 400, 10, 200);
+  const inimigoVoador = new Inimigo(matrizInimigoVoador, imagemInimigoVoador, width - 52, 200, 100, 75, 200, 150, 10, 1500);
+  
+  inimigos.push(inimigo);
+  inimigos.push(trol);
+  inimigos.push(inimigoVoador);
 
   gameOver = new Cenario(imagemGameOver, 0);
   
@@ -89,13 +153,22 @@ function draw() {
   cross.move();
   grass.exibe();
   grass.move();
-  inimigo.exibe();
-  inimigo.moveInimigo();
+
+
   personagem.exibe();
   personagem.aplicaGravidade();
   
-  if(personagem.colisao(inimigo)){
-    noLoop();
-    gameOver.exibe(); 
-  }
+  inimigos.forEach(inimigo => {
+    inimigo.exibe();
+    inimigo.moveInimigo();
+
+    if(personagem.colisao(inimigo)){
+      console.log('colidiu');
+      //noLoop();
+      //gameOver.exibe(); 
+    }
+  });
+
+  pontuacao.exibePontos();
+  pontuacao.adicionarPonto();
 }
