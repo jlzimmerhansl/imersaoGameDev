@@ -21,10 +21,11 @@ class TelaInicial
     {
         textFont(fontTelaInicial);
         textAlign(CENTER);
+        fill(200);
         textSize(50);
-        text('As aventuras de', width / 2, height / 3);
+        text('Alien vs', width / 2, height / 3);
         textSize(100);
-        text('Hipsta', width / 2, height / 5 * 3);
+        text('Zombies', width / 2, height / 6 * 3);
     }
 
     _button(){

@@ -1,7 +1,7 @@
 function preload() {
     imagemGameOver = loadImage('imagens/cenario/gameover.png');
-    imagemTelaInicial = loadImage('imagens/cenario/telaInicial.png');
-    fontTelaInicial = loadFont('assets/fonteTelaInicial.otf');
+    imagemTelaInicial = loadImage('imagens/cenario/telaInicial2.png');
+    fontTelaInicial = loadFont('assets/fontJogo.ttf');
   
   
     imagemBackground = loadImage('imagens/cenario/cemiterio/background.png');
