@@ -15,6 +15,7 @@ let imagemAlien;
 let imagemPassaro;
 let imagemTelaInicial;
 let fontTelaInicial;
+let imagemCoracao;
 
 let cenario;
 let somDoJogo;
@@ -40,6 +41,8 @@ let cenaAtual = 'telaInicial';
 let cenas;
 let telaInicial;
 let button;
+let life;
+let fita;
 
 const matrizPersonagem = criaMatriz(230, 230, 3, 3);
 const matrizInimigo = criaMatriz(180, 100, 3, 2);

@@ -2,7 +2,8 @@ class Jogo
 {
     constructor()
     {
-        this.inimigoAtual = 0;
+        this.indice = 0;
+        this.mapa = fita.mapa;
     }
 
     setup()
@@ -13,6 +14,7 @@ class Jogo
         const cemitery = new Cenario(imagemCemitery, 6.75);
         const cross = new Cenario(imagemCross, 5.75);
         const grass = new Cenario(imagemGrass, 4.5);
+        life = new Life(fita.configuracoes.vidaMaxima, fita.configuracoes.vidaInicial);
   
         cenarios.push(background);
         cenarios.push(sky);
@@ -21,9 +23,9 @@ class Jogo
         cenarios.push(grass);
   
         personagem = new Personagem(matrizPersonagem,imagemPersonagem, 0, 30, 230, 230, 230, 230);
-        const inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 30, 110, 70, 180, 100, 10, 100);
-        const alien = new Inimigo(matrizAlien, imagemAlien, width, 0, 240, 230, 140, 130, 10, 100);
-        const passaro = new Inimigo(matrizPassaro, imagemPassaro, width - 52, 400, 50, 70, 150, 150, 10, 100);
+        const inimigo = new Inimigo(matrizInimigo, imagemInimigo, width - 52, 30, 110, 70, 180, 100, 10);
+        const alien = new Inimigo(matrizAlien, imagemAlien, width, 0, 240, 230, 140, 130, 10);
+        const passaro = new Inimigo(matrizPassaro, imagemPassaro, width - 52, 400, 50, 70, 150, 150, 10);
   
         inimigos.push(inimigo);
         inimigos.push(alien);
@@ -31,6 +33,7 @@ class Jogo
 
         gameOver = new Cenario(imagemGameOver, 0);
         telaInicial = new Cenario(imagemTelaInicial, 0);
+
     }
 
     keyPressed(key)
@@ -48,29 +51,38 @@ class Jogo
             cenario.exibe();
             cenario.move();
         });
+
+        life.draw();
         
         personagem.exibe();
         personagem.aplicaGravidade();
         
-        const inimigo = inimigos[this.inimigoAtual];
+        const linhaAtual = this.mapa[this.indice];
+        const inimigo = inimigos[linhaAtual.inimigo];
         const inimigoVisivel = inimigo.posicaoImagemX < - inimigo.larguraImagem;
+        inimigo.velocidade = linhaAtual.velocidade;
           
         inimigo.exibe();
         inimigo.moveInimigo();
+
         
         if(inimigoVisivel){
-          this.inimigoAtual++;
-          if(this.inimigoAtual > 2)
+          this.indice++;
+          inimigo.reaparece();
+          if(this.indice > this.mapa.length - 1)
           {
-            this.inimigoAtual = 0;
+            this.indice = 0;
            }
-            inimigo.velocidade = parseInt(random(10, 30));
         }
         
         if(personagem.colisao(inimigo)){
-            console.log('colidiu');
-            //noLoop();
-            //gameOver.exibe(); 
+            life.loseLife();
+            personagem.ficaInvensivel();
+            if(life.lifes === 0){
+                noLoop();
+                gameOver.exibe(); 
+            }
+;           
         }
         
         pontuacao.exibePontos();

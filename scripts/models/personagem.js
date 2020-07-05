@@ -12,6 +12,7 @@ class Personagem extends Animacao
     this.posicaoYInicial = height - this.alturaImagem - variacaoY;
     this.posicaoY = this.posicaoYInicial;
     this.numeroPulos = 0;
+    this.invensivel = false;
   }
 
   pulaPersonagem(){
@@ -29,9 +30,20 @@ class Personagem extends Animacao
     }
   }
 
-  colisao(inimigo){
-    
+  ficaInvensivel()
+  {
+    this.invensivel = true;
+    setTimeout(() => {
+      this.invensivel = false;
+    }, 1000);
+  }
 
+  colisao(inimigo){
+    if(this.invensivel)
+    {
+      return false;
+    }
+    
     const precisao = .8;
 
     return collideRectRect(
@@ -44,6 +56,5 @@ class Personagem extends Animacao
       inimigo.larguraImagem * precisao,
       inimigo.alturaImagem * precisao
     );
-
   }
 }

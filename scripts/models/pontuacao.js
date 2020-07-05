@@ -4,9 +4,10 @@ class Pontuacao{
     }
 
     exibePontos(){
+        textFont(fontTelaInicial);
         textAlign(RIGHT);
         fill('#fff'); 
-        textSize(50);
+        textSize(30);
         text('Tempo: ' + parseInt(this.pontos), width - 30, 50);
     }
 
